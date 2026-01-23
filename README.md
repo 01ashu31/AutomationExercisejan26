@@ -1,6 +1,6 @@
 Test Case 1: Register User
 1. Launch browser
-2. Navigate to url 'http://automationexercise.com'
+2. Navigate to url 
 3. Verify that home page is visible successfully
 4. Click on 'Signup / Login' button
 5. Verify 'New User Signup!' is visible
