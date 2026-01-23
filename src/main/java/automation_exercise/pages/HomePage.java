@@ -10,8 +10,6 @@ import automation_exercise.base.BasePage;
 public class HomePage extends BasePage{
 	
 	
-	
-	
 	public HomePage(WebDriver driver) {
 		super(driver);
 		PageFactory.initElements(driver, this);
