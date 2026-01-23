@@ -35,7 +35,7 @@ public class LoginPage extends BasePage {
 	}
 	
 	public boolean isNewUserSignupVisible() {
-		return signUpText.isDisplayed();
+		return waitForVisibility(signUpText).isDisplayed();
 	}
 	
 	

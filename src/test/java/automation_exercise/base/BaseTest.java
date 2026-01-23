@@ -27,10 +27,12 @@ public class BaseTest {
 	protected WebDriver driver;
 	HomePage homePage;
 	protected Properties config;
+	protected Properties testData;
 
 	@BeforeMethod
 	public void setUp() {
 		config = PropertyManager.getConfig();
+		testData=PropertyManager.getTestData();
 		initilizeDriver();
 		driver.manage().window().maximize();
 		driver.get(config.getProperty("url"));
@@ -74,9 +76,10 @@ public class BaseTest {
 		} catch (Exception e) {
 			throw new NoSuchDriverException("Browser initialzed failed: " + browserName, e);
 		}
-		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-
+		
 	}
+	
+
 
 	@AfterMethod(alwaysRun = true)
 	public void tearDown() {

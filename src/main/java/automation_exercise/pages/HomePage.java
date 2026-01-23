@@ -20,16 +20,41 @@ public class HomePage extends BasePage{
 	@FindBy(xpath="//a[@href='/login']")
 	WebElement LoginSingnupButton;
 	
+	@FindBy(xpath="//a[//i[contains(@class,'fa-user')]]/b")
+	WebElement loggedInUserName;
+	
+	@FindBy(xpath="//a[@href='/delete_account']")
+	WebElement deleteAccountButton;
+	
+	
+	public boolean isHomePageVisible() {
+		waitForUrlContains("automationexercise");
+		return true;
+	}
 	
 	public LoginPage clickOnSignUpLoginButton() {
-		LoginSingnupButton.click();
+		waitForClickable(LoginSingnupButton).click();
 		return new LoginPage(driver);
 		
 	}
 	
-	public boolean isHomePageVisible() {
-		return getCurrentUrl().contains("automationexercise");
+	public boolean isUserLoggedIn() {
+		return waitForVisibility(loggedInUserName).isDisplayed();
 	}
+	
+	public String getLoggedInUserName() {
+	    return waitForVisibility(loggedInUserName).getText().trim();
+	}
+	
+	public boolean getLoggedInUser() {
+		return waitForVisibility(loggedInUserName).isDisplayed();
+	}
+	
+	public AccountCreatedPage clickOnDeleteAccount() {
+		waitForVisibility(deleteAccountButton).click();
+		return new AccountCreatedPage(driver);
+	}
+	
 	
 
 
