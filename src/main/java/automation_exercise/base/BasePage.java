@@ -2,6 +2,8 @@ package automation_exercise.base;
 
 import java.time.Duration;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
@@ -13,6 +15,8 @@ public class BasePage {
 	
 	protected WebDriver driver;
 	protected WebDriverWait wait;
+	
+	protected Logger log= LogManager.getLogger(this.getClass());
 	
 	
 	public BasePage(WebDriver driver) {

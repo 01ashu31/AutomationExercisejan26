@@ -27,16 +27,24 @@ public class LoginPage extends BasePage {
 	WebElement signUpButton;
 	
 	public SignUpPage verifySignup(String userName, String email) {
-		signUpName.sendKeys(userName);
-		signupEmail.sendKeys(email);
-		signUpButton.click();
-		SignUpPage signup=new SignUpPage(driver);
-		return signup;
+	    log.info("Entering signup details");
+	    log.info("Signup UserName: {}, Email: {}", userName, email);
+
+	    signUpName.sendKeys(userName);
+	    signupEmail.sendKeys(email);
+	    signUpButton.click();
+
+	    log.info("Signup form submitted, navigating to SignUp Page");
+	    return new SignUpPage(driver);
 	}
-	
+
 	public boolean isNewUserSignupVisible() {
-		return waitForVisibility(signUpText).isDisplayed();
+	    log.info("Verifying 'New User Signup' section visibility");
+	    boolean status = waitForVisibility(signUpText).isDisplayed();
+	    log.info("New User Signup section visible: {}", status);
+	    return status;
 	}
+
 	
 	
 	

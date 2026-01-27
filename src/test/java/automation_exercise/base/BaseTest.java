@@ -4,11 +4,14 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Method;
 import java.time.Duration;
 import java.util.Properties;
 
 import javax.management.RuntimeErrorException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
@@ -17,22 +20,45 @@ import org.openqa.selenium.firefox.GeckoDriverInfo;
 import org.openqa.selenium.remote.NoSuchDriverException;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeSuite;
+
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
 
 import automation_exercise.pages.HomePage;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import utils.ExtentManager;
 import utils.PropertyManager;
 
 public class BaseTest {
 //	 Properties prop;
-	protected WebDriver driver;
-	HomePage homePage;
+	public WebDriver driver;
+	protected HomePage homePage;
 	protected Properties config;
 	protected Properties testData;
+
+	protected static final Logger log = LogManager.getLogger(BaseTest.class);
+	protected static ExtentReports extent;
+	public static ThreadLocal<ExtentTest> extentTest = new ThreadLocal<>();
+
+	@BeforeSuite(alwaysRun = true)
+	public void setUpReport() {
+		extent = ExtentManager.getReport();
+		log.info("Extent Report initialized");
+	}
+
+	@BeforeMethod(alwaysRun = true)
+	public void createTest(Method method) {
+		ExtentTest test = extent.createTest(method.getName());
+		extentTest.set(test);
+		log.info("Starting test: {}", method.getName());
+	}
+
 
 	@BeforeMethod
 	public void setUp() {
 		config = PropertyManager.getConfig();
-		testData=PropertyManager.getTestData();
+		testData = PropertyManager.getTestData();
 		initilizeDriver();
 		driver.manage().window().maximize();
 		driver.get(config.getProperty("url"));
@@ -76,17 +102,21 @@ public class BaseTest {
 		} catch (Exception e) {
 			throw new NoSuchDriverException("Browser initialzed failed: " + browserName, e);
 		}
-		
-	}
-	
 
+	}
 
 	@AfterMethod(alwaysRun = true)
 	public void tearDown() {
 		if (driver != null) {
 			driver.quit();
+			log.info("Browser closed successfully");
 		}
+	}
 
+	@AfterMethod(alwaysRun = true)
+	public void flushReport() {
+		extent.flush();
+		log.info("Extent Report flushed");
 	}
 
 }

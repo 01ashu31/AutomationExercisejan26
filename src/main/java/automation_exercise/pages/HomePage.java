@@ -28,31 +28,45 @@ public class HomePage extends BasePage{
 	
 	
 	public boolean isHomePageVisible() {
-		waitForUrlContains("automationexercise");
-		return true;
+	    log.info("Verifying Home Page URL contains 'automationexercise'");
+	    waitForUrlContains("automationexercise");
+	    log.info("Home Page URL verification successful");
+	    return true;
 	}
-	
+
 	public LoginPage clickOnSignUpLoginButton() {
-		waitForClickable(LoginSingnupButton).click();
-		return new LoginPage(driver);
-		
+	    log.info("Clicking on SignUp / Login button");
+	    waitForClickable(LoginSingnupButton).click();
+	    log.info("Navigated to Login Page");
+	    return new LoginPage(driver);
 	}
-	
+
 	public boolean isUserLoggedIn() {
-		return waitForVisibility(loggedInUserName).isDisplayed();
+	    log.info("Checking whether user is logged in");
+	    boolean status = waitForVisibility(loggedInUserName).isDisplayed();
+	    log.info("User logged-in status: {}", status);
+	    return status;
 	}
-	
+
 	public String getLoggedInUserName() {
-	    return waitForVisibility(loggedInUserName).getText().trim();
+	    log.info("Fetching logged-in user name");
+	    String userName = waitForVisibility(loggedInUserName).getText().trim();
+	    log.info("Logged-in user name: {}", userName);
+	    return userName;
 	}
-	
+
 	public boolean getLoggedInUser() {
-		return waitForVisibility(loggedInUserName).isDisplayed();
+	    log.info("Verifying logged-in user name visibility");
+	    boolean status = waitForVisibility(loggedInUserName).isDisplayed();
+	    log.info("Logged-in user visibility status: {}", status);
+	    return status;
 	}
-	
+
 	public AccountCreatedPage clickOnDeleteAccount() {
-		waitForVisibility(deleteAccountButton).click();
-		return new AccountCreatedPage(driver);
+	    log.info("Clicking on Delete Account button");
+	    waitForVisibility(deleteAccountButton).click();
+	    log.info("Delete Account action triggered");
+	    return new AccountCreatedPage(driver);
 	}
 	
 	

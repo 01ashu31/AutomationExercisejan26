@@ -28,16 +28,24 @@ public class AccountCreatedPage extends BasePage{
 	
 	
 	public boolean isContnuePageDisplayed() {
-		return waitForVisibility(accountCreatedPage).isDisplayed();
+		log.info("Checking whether Account Created page is displayed");
+		boolean isDisplay= waitForVisibility(accountCreatedPage).isDisplayed();
+		log.info("Account Created page displayed status: {}", isDisplay);
+		return isDisplay;
 	}
 
 	public boolean isDeletePageDisplayed() {
-		return waitForVisibility(accountDeletedPage).isDisplayed();
+		log.info("Checking whether Account Deleted page is displayed");
+	    boolean isDisplayed = waitForVisibility(accountDeletedPage).isDisplayed();
+	    log.info("Account Deleted page displayed status: {}", isDisplayed);
+	    return isDisplayed;
 	}
 
 	public HomePage clickOnContinueButton() {
-		waitForClickable(accountContinueButton).click();
-		return new HomePage(driver);
+		log.info("Clicking on Continue button");
+	    waitForClickable(accountContinueButton).click();
+	    log.info("Continue button clicked successfully, navigating to Home Page");
+	    return new HomePage(driver);
 	}
 
 }

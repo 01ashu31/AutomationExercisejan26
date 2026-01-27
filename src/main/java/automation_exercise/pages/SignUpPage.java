@@ -62,38 +62,44 @@ public class SignUpPage extends BasePage {
 
 	@FindBy(xpath = "(//button[@type='submit'])[1]")
 	WebElement createAccountButton;
-	
-	public AccountCreatedPage enterAccountInfomation(String pass, String day, String month, String year, String fName, String lName,
-			String address, String countyName, String stateName, String cityName, String zipcodeadd, String Mobilenum) {
+
+	public AccountCreatedPage enterAccountInfomation(String pass, String day, String month, String year, String fName,
+			String lName, String address, String countyName, String stateName, String cityName, String zipcodeadd,
+			String Mobilenum) {
+
+		log.info("Entering account information");
+
 		titile.click();
 		password.sendKeys(pass);
 
-		Select daySelect = new Select(days);
-		daySelect.selectByVisibleText(day);
+		log.info("Selecting DOB: Day={}, Month={}, Year={}", day, month, year);
+		new Select(days).selectByVisibleText(day);
+		new Select(months).selectByValue(month);
+		new Select(years).selectByValue(year);
 
-		Select monthSelect = new Select(months);
-		monthSelect.selectByValue(month);
-
-		Select yearSelect = new Select(years);
-		yearSelect.selectByValue(year);
-
+		log.info("Selecting newsletter and partner options");
 		newsSletterCheckBox.click();
 		partnerCheckBox.click();
 
+		log.info("Entering personal details");
 		firstName.sendKeys(fName);
 		lastName.sendKeys(lName);
 		address1.sendKeys(address);
-		Select countrySelect = new Select(country);
-		countrySelect.selectByValue(countyName);
+
+		log.info("Selecting country: {}", countyName);
+		new Select(country).selectByValue(countyName);
+
 		state.sendKeys(stateName);
 		city.sendKeys(cityName);
 		zipcode.sendKeys(zipcodeadd);
 		mobileNumber.sendKeys(Mobilenum);
+
+		log.info("Submitting Create Account form");
 		createAccountButton.click();
+
+		log.info("Account creation submitted, navigating to Account Created Page");
 		return new AccountCreatedPage(driver);
 
 	}
-
-	
 
 }
