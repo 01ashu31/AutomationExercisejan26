@@ -19,6 +19,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.GeckoDriverInfo;
 import org.openqa.selenium.remote.NoSuchDriverException;
 import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 
@@ -47,21 +48,26 @@ public class BaseTest {
 		log.info("Extent Report initialized");
 	}
 
-	@BeforeMethod(alwaysRun = true)
-	public void createTest(Method method) {
-		ExtentTest test = extent.createTest(method.getName());
-		extentTest.set(test);
-		log.info("Starting test: {}", method.getName());
+	@AfterSuite(alwaysRun = true)
+	public void tearDownReport() {
+		if (extent != null) {
+			extent.flush();
+			log.info("Extent Report flushed after suite execution");
+		}
 	}
 
 
-	@BeforeMethod
-	public void setUp() {
+	@BeforeMethod(alwaysRun = true)
+	public void setUp(Method method) {
+		// 🔥 Create ExtentTest BEFORE test execution
+	    ExtentTest test = extent.createTest(method.getName());
+	    extentTest.set(test);
 		config = PropertyManager.getConfig();
 		testData = PropertyManager.getTestData();
 		initilizeDriver();
 		driver.manage().window().maximize();
 		driver.get(config.getProperty("url"));
+		log.info("Browser launched and URL loaded");
 //		 return homePage;
 	}
 
@@ -111,12 +117,6 @@ public class BaseTest {
 			driver.quit();
 			log.info("Browser closed successfully");
 		}
-	}
-
-	@AfterMethod(alwaysRun = true)
-	public void flushReport() {
-		extent.flush();
-		log.info("Extent Report flushed");
 	}
 
 }

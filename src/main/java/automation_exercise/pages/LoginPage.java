@@ -11,7 +11,7 @@ public class LoginPage extends BasePage {
 	
 	public LoginPage(WebDriver driver) {
 		super(driver);
-		PageFactory.initElements(driver, this);
+//		PageFactory.initElements(driver, this);
 	}
 	
 	@FindBy(xpath="//h2[contains(text(),'New User Signup!')]")

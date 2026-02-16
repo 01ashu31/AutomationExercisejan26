@@ -12,7 +12,7 @@ public class SignUpPage extends BasePage {
 
 	public SignUpPage(WebDriver driver) {
 		super(driver);
-		PageFactory.initElements(driver, this);
+//		PageFactory.initElements(driver, this);
 	}
 
 	@FindBy(id = "id_gender1")

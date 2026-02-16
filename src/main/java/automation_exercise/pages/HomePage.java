@@ -12,19 +12,19 @@ public class HomePage extends BasePage{
 	
 	public HomePage(WebDriver driver) {
 		super(driver);
-		PageFactory.initElements(driver, this);
+		
 	}
 	
 	
 	
 	@FindBy(xpath="//a[@href='/login']")
-	WebElement LoginSingnupButton;
+	private WebElement LoginSingnupButton;
 	
 	@FindBy(xpath="//a[//i[contains(@class,'fa-user')]]/b")
-	WebElement loggedInUserName;
+	private WebElement loggedInUserName;
 	
 	@FindBy(xpath="//a[@href='/delete_account']")
-	WebElement deleteAccountButton;
+	private WebElement deleteAccountButton;
 	
 	
 	public boolean isHomePageVisible() {

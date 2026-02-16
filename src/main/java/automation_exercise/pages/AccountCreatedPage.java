@@ -11,7 +11,7 @@ public class AccountCreatedPage extends BasePage{
 
 	public AccountCreatedPage(WebDriver driver) {
 		super(driver);
-		PageFactory.initElements(driver, this);
+//		PageFactory.initElements(driver, this);
 	}
 	
 	
