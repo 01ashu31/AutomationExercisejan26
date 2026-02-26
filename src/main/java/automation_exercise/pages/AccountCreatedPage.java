@@ -48,4 +48,10 @@ public class AccountCreatedPage extends BasePage{
 	    return new HomePage(driver);
 	}
 
+	@Override
+	protected String getPageTitle() {
+		// TODO Auto-generated method stub
+		return driver.getTitle();
+	}
+
 }

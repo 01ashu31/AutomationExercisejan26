@@ -45,6 +45,12 @@ public class LoginPage extends BasePage {
 	    return status;
 	}
 
+	@Override
+	protected String getPageTitle() {
+		// TODO Auto-generated method stub
+		return driver.getTitle();
+	}
+
 	
 	
 	

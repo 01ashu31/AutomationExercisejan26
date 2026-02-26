@@ -16,7 +16,6 @@ public class HomePage extends BasePage{
 	}
 	
 	
-	
 	@FindBy(xpath="//a[@href='/login']")
 	private WebElement LoginSingnupButton;
 	
@@ -68,6 +67,11 @@ public class HomePage extends BasePage{
 	    log.info("Delete Account action triggered");
 	    return new AccountCreatedPage(driver);
 	}
+
+	@Override
+	protected String getPageTitle() {
+		// TODO Auto-generated method stub
+		return driver.getTitle();	}
 	
 	
 

@@ -102,4 +102,10 @@ public class SignUpPage extends BasePage {
 
 	}
 
+	@Override
+	protected String getPageTitle() {
+		// TODO Auto-generated method stub
+		return driver.getTitle();
+	}
+
 }

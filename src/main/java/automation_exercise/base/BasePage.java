@@ -26,9 +26,7 @@ public abstract class BasePage {
 		
 	}
 	
-	protected String getPageTitle() {
-		return driver.getTitle();
-	}
+	protected abstract String getPageTitle() ;
 	
 	protected String getCurrentUrl() {
 		return driver.getCurrentUrl();
