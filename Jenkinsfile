@@ -1,32 +1,31 @@
-pipeline{
-	agent any
-	
-	tools{
-		maven 'Maven-3.9.6'
-		jdk 'JDK-17'
-	}
-	
-	parameters{
-		choice(
-			name: 'Browser',
-			choice:['chrome'],
-			description: 'select browser to execute'
-		)
-		
-		choice(
+pipeline {
+    agent any
+    
+    tools {
+        maven 'Maven-3.9.6'
+        jdk 'JDK-17'
+    }
+    
+    parameters {
+        choice(
+            name: 'Browser',
+            choices: ['chrome'],
+            description: 'Select browser to execute'
+        )
+        
+        choice(
             name: 'SUITE',
             choices: ['testng.xml'],
             description: 'Select TestNG suite'
         )
-        
-        environment {
+    }
+    
+    environment {
         MAVEN_OPTS = '-Xmx1024m'
         REPORT_PATH = 'test-output/ExtentReports'
     }
-	}
-	
-	 stages {
-
+    
+    stages {
         stage('Checkout Code') {
             steps {
                 echo 'Checking out source code...'
@@ -44,22 +43,19 @@ pipeline{
 
         stage('Run Tests') {
             steps {
-                echo "Executing tests on ${params.BROWSER} using ${params.SUITE}"
-
+                echo "Executing tests on ${params.Browser} using ${params.SUITE}"
                 sh """
-                   mvn test \
-                   -Dbrowser=${params.BROWSER} \
-                   -DsuiteXmlFile=${params.SUITE}
+                    mvn test \\
+                    -Dbrowser=${params.Browser} \\
+                    -DsuiteXmlFile=${params.SUITE}
                 """
             }
         }
     }
 
     post {
-
         always {
             echo 'Archiving test reports...'
-
             archiveArtifacts artifacts: '**/ExtentReports/**', fingerprint: true
             archiveArtifacts artifacts: '**/surefire-reports/*.xml', fingerprint: true
         }
