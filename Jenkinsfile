@@ -15,7 +15,7 @@ pipeline {
         
         choice(
             name: 'SUITE',
-            choices: ['testng.xml'],
+            choices: ['src/test/resources/testng.xml'],
             description: 'Select TestNG suite'
         )
     }
