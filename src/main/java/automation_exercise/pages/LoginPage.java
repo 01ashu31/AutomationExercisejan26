@@ -1,17 +1,14 @@
 package automation_exercise.pages;
 
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 import automation_exercise.base.BasePage;
 
 public class LoginPage extends BasePage {
 	
-	public LoginPage(WebDriver driver) {
-		super(driver);
-//		PageFactory.initElements(driver, this);
+	public LoginPage() {
+		super();
 	}
 	
 	@FindBy(xpath="//h2[contains(text(),'New User Signup!')]")
@@ -35,7 +32,7 @@ public class LoginPage extends BasePage {
 	    signUpButton.click();
 
 	    log.info("Signup form submitted, navigating to SignUp Page");
-	    return new SignUpPage(driver);
+	    return new SignUpPage();
 	}
 
 	public boolean isNewUserSignupVisible() {

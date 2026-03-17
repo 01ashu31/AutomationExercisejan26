@@ -7,7 +7,6 @@ import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -19,11 +18,10 @@ public abstract class BasePage {
 	protected Logger log= LogManager.getLogger(this.getClass());
 	
 	
-	public BasePage(WebDriver driver) {
-		this.driver=driver;
+	public BasePage() {
+		this.driver = DriverManager.getDriver();
 		this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        PageFactory.initElements(driver, this);
-		
+		PageFactory.initElements(driver, this);
 	}
 	
 	protected abstract String getPageTitle() ;

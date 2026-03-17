@@ -22,7 +22,7 @@ public class LoginPageTest extends BaseTest {
 		extentTest.get().info("Register User test started");
 
 		SoftAssert softAssert = new SoftAssert();
-		HomePage homePage = new HomePage(driver);
+		HomePage homePage = new HomePage();
 
 		log.info("Verifying home page visibility");
 		Assert.assertTrue(homePage.isHomePageVisible());
@@ -42,7 +42,7 @@ public class LoginPageTest extends BaseTest {
 
 		loginPage.verifySignup(name, email);
 
-		SignUpPage signupForm = new SignUpPage(driver);
+		SignUpPage signupForm = new SignUpPage();
 
 		AccountCreatedPage accountCreatePage = signupForm.enterAccountInfomation(
 

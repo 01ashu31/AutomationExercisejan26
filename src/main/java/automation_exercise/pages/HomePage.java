@@ -1,18 +1,15 @@
 package automation_exercise.pages;
 
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 import automation_exercise.base.BasePage;
 
 public class HomePage extends BasePage{
 	
 	
-	public HomePage(WebDriver driver) {
-		super(driver);
-		
+	public HomePage() {
+		super();
 	}
 	
 	
@@ -37,7 +34,7 @@ public class HomePage extends BasePage{
 	    log.info("Clicking on SignUp / Login button");
 	    waitForClickable(LoginSingnupButton).click();
 	    log.info("Navigated to Login Page");
-	    return new LoginPage(driver);
+	    return new LoginPage();
 	}
 
 	public boolean isUserLoggedIn() {
@@ -65,7 +62,7 @@ public class HomePage extends BasePage{
 	    log.info("Clicking on Delete Account button");
 	    waitForVisibility(deleteAccountButton).click();
 	    log.info("Delete Account action triggered");
-	    return new AccountCreatedPage(driver);
+	    return new AccountCreatedPage();
 	}
 
 	@Override
