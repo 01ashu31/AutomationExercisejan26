@@ -1,16 +1,29 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 
-<suite name="Automation Suit">
+<suite name="Automation Suite" parallel="tests" thread-count="3">
 
 	<listeners>
-
 		<listener class-name="listeners.TestListner" />
-
 	</listeners>
 
-	<test name="Smoke Test">
+	<test name="Register User - Chrome">
+		<parameter name="browser" value="chrome" />
 		<classes>
 			<class name="com.automation.automation_exercise.LoginPageTest" />
 		</classes>
 	</test>
-</suite> 
+
+	<test name="Register User - Firefox">
+		<parameter name="browser" value="firefox" />
+		<classes>
+			<class name="com.automation.automation_exercise.LoginPageTest" />
+		</classes>
+	</test>
+
+	<test name="Register User - Edge">
+		<parameter name="browser" value="edge" />
+		<classes>
+			<class name="com.automation.automation_exercise.LoginPageTest" />
+		</classes>
+	</test>
+</suite>

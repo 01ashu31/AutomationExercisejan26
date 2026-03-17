@@ -2,54 +2,76 @@ package automation_exercise.base;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.NoSuchDriverException;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 public final class DriverManager {
 
-	private static WebDriver driver;
+	private static final ThreadLocal<WebDriver> DRIVER = new ThreadLocal<>();
 
 	private DriverManager() {
 	}
 
-	public static synchronized WebDriver getDriver(String browserName) {
+	public static WebDriver getDriver(String browserName) {
+		WebDriver driver = DRIVER.get();
 		if (driver == null) {
 			driver = createDriver(browserName);
+			DRIVER.set(driver);
 		}
 		return driver;
 	}
 
-	public static synchronized WebDriver getDriver() {
+	public static WebDriver getDriver() {
+		WebDriver driver = DRIVER.get();
 		if (driver == null) {
 			throw new IllegalStateException("WebDriver is not initialized. Call getDriver(browserName) first.");
 		}
 		return driver;
 	}
 
-	public static synchronized void quitDriver() {
+	public static void quitDriver() {
+		WebDriver driver = DRIVER.get();
 		if (driver != null) {
 			driver.quit();
-			driver = null;
+			DRIVER.remove();
 		}
 	}
 
 	private static WebDriver createDriver(String browserName) {
+		String normalizedBrowser = browserName == null ? "" : browserName.trim().toLowerCase();
+		boolean headless = Boolean.parseBoolean(System.getProperty("headless", "true"));
 		try {
-			if (browserName.equalsIgnoreCase("chrome")) {
+			switch (normalizedBrowser) {
+			case "chrome":
 				WebDriverManager.chromedriver().setup();
-				return new ChromeDriver();
-			} else if (browserName.equalsIgnoreCase("firefox")) {
+				ChromeOptions chromeOptions = new ChromeOptions();
+				if (headless) {
+					chromeOptions.addArguments("--headless=new", "--no-sandbox", "--disable-dev-shm-usage");
+				}
+				return new ChromeDriver(chromeOptions);
+			case "firefox":
 				WebDriverManager.firefoxdriver().setup();
-				return new FirefoxDriver();
-			} else if (browserName.equalsIgnoreCase("edge")) {
+				FirefoxOptions firefoxOptions = new FirefoxOptions();
+				if (headless) {
+					firefoxOptions.addArguments("-headless");
+				}
+				return new FirefoxDriver(firefoxOptions);
+			case "edge":
 				WebDriverManager.edgedriver().setup();
-				return new EdgeDriver();
+				EdgeOptions edgeOptions = new EdgeOptions();
+				if (headless) {
+					edgeOptions.addArguments("--headless=new", "--no-sandbox", "--disable-dev-shm-usage");
+				}
+				return new EdgeDriver(edgeOptions);
+			default:
+				throw new IllegalArgumentException("Unsupported browser: " + browserName);
 			}
-
-			throw new IllegalArgumentException("Unsupported browser: " + browserName);
 		} catch (Exception e) {
 			throw new NoSuchDriverException("Browser initialization failed: " + browserName, e);
 		}
