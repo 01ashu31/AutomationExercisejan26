@@ -1,30 +1,45 @@
 pipeline {
     agent any
-    
+
     tools {
         maven 'Maven-3.9.6'
         jdk 'JDK-17'
     }
-    
+
+    triggers {
+        githubPush()
+    }
+
     parameters {
         choice(
-            name: 'Browser',
-            choices: ['chrome'],
-            description: 'Select browser to execute'
+            name: 'EXECUTION_MODE',
+            choices: ['cross-browser', 'single-browser'],
+            description: 'Run all browsers in parallel or only one browser'
         )
-        
+
+        choice(
+            name: 'BROWSER',
+            choices: ['chrome', 'firefox', 'edge'],
+            description: 'Browser used only when EXECUTION_MODE=single-browser'
+        )
+
         choice(
             name: 'SUITE',
             choices: ['src/test/resources/testng.xml'],
             description: 'Select TestNG suite'
         )
+
+        booleanParam(
+            name: 'HEADLESS',
+            defaultValue: true,
+            description: 'Run browsers in headless mode'
+        )
     }
-    
+
     environment {
         MAVEN_OPTS = '-Xmx1024m'
-        REPORT_PATH = 'test-output/ExtentReports'
     }
-    
+
     stages {
         stage('Checkout Code') {
             steps {
@@ -34,30 +49,48 @@ pipeline {
             }
         }
 
-        stage('Clean & Build') {
+        stage('Clean') {
             steps {
-                echo 'Running Maven clean...'
                 sh 'mvn clean'
             }
         }
 
-        stage('Run Tests') {
+        stage('Run Tests - Single Browser') {
+            when {
+                expression { params.EXECUTION_MODE == 'single-browser' }
+            }
             steps {
-                echo "Executing tests on ${params.Browser} using ${params.SUITE}"
-                sh """
-                    mvn test \\
-                    -Dbrowser=${params.Browser} \\
-                    -DsuiteXmlFile=${params.SUITE}
-                """
+                sh "mvn test -DsuiteXmlFile=${params.SUITE} -Dbrowser=${params.BROWSER} -Dheadless=${params.HEADLESS}"
+            }
+        }
+
+        stage('Run Tests - Cross Browser Parallel') {
+            when {
+                expression { params.EXECUTION_MODE == 'cross-browser' }
+            }
+            matrix {
+                axes {
+                    axis {
+                        name 'BROWSER'
+                        values 'chrome', 'firefox', 'edge'
+                    }
+                }
+                stages {
+                    stage('Execute') {
+                        steps {
+                            sh "mvn test -DsuiteXmlFile=${params.SUITE} -Dbrowser=${BROWSER} -Dheadless=${params.HEADLESS}"
+                        }
+                    }
+                }
             }
         }
     }
 
     post {
         always {
-            echo 'Archiving test reports...'
             archiveArtifacts artifacts: '**/ExtentReports/**', fingerprint: true
             archiveArtifacts artifacts: '**/surefire-reports/*.xml', fingerprint: true
+            junit '**/surefire-reports/*.xml'
         }
 
         success {
@@ -69,7 +102,6 @@ pipeline {
         }
 
         cleanup {
-            echo 'Workspace cleanup'
             cleanWs()
         }
     }

@@ -11,6 +11,8 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.Optional;
+import org.testng.annotations.Parameters;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
@@ -46,14 +48,15 @@ public class BaseTest {
 
 
 	@BeforeMethod(alwaysRun = true)
-	public void setUp(Method method) {
+	@Parameters("browser")
+	public void setUp(Method method, @Optional("") String suiteBrowser) {
 		// 🔥 Create ExtentTest BEFORE test execution
 	    ExtentTest test = extent.createTest(method.getName());
 	    extentTest.set(test);
 		config = PropertyManager.getConfig();
 		testData = PropertyManager.getTestData();
 		String browserName = System.getProperty("browser") != null ? System.getProperty("browser")
-				: config.getProperty("browser");
+				: (!suiteBrowser.isBlank() ? suiteBrowser : config.getProperty("browser"));
 		driver = DriverManager.getDriver(browserName);
 		driver.manage().window().maximize();
 		driver.get(config.getProperty("url"));
