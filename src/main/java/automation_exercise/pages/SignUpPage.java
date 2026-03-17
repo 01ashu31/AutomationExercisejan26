@@ -1,18 +1,15 @@
 package automation_exercise.pages;
 
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
 
 import automation_exercise.base.BasePage;
 
 public class SignUpPage extends BasePage {
 
-	public SignUpPage(WebDriver driver) {
-		super(driver);
-//		PageFactory.initElements(driver, this);
+	public SignUpPage() {
+		super();
 	}
 
 	@FindBy(id = "id_gender1")
@@ -98,7 +95,7 @@ public class SignUpPage extends BasePage {
 		createAccountButton.click();
 
 		log.info("Account creation submitted, navigating to Account Created Page");
-		return new AccountCreatedPage(driver);
+		return new AccountCreatedPage();
 
 	}
 
